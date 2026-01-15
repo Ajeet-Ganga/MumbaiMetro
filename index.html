@@ -8,66 +8,75 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --metro-blue: #1d4ed8; --accent-red: #b91c1c; }
-        body { font-family: 'Inter', sans-serif; line-height: 1.8; color: #1a202c; background-color: #fdfdfd; }
+        :root { --et-red: #ed1c24; --paper-pink: #fff1e5; --ink-black: #1a1a1a; --metro-blue: #1d4ed8; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.8; color: var(--ink-black); background-color: var(--paper-pink); }
         .journal-serif { font-family: 'Crimson Pro', serif; }
-        .dropcap::first-letter { font-family: 'Crimson Pro', serif; float: left; font-size: 4.8rem; line-height: 0.8; padding-top: 6px; padding-right: 12px; font-weight: 700; color: #111; }
-        .nav-link.active { color: var(--metro-blue); border-bottom: 2px solid var(--metro-blue); font-weight: 700; }
-        .chart-container { position: relative; width: 100%; height: 320px; margin: 2rem 0; }
-        .sticky-nav { backdrop-filter: blur(12px); background: rgba(255,255,255,0.95); }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); margin: 2.5rem 0; }
+        .dropcap::first-letter { font-family: 'Crimson Pro', serif; float: left; font-size: 4.8rem; line-height: 0.8; padding-top: 6px; padding-right: 12px; font-weight: 700; color: var(--et-red); }
+        .nav-link.active { color: var(--et-red); border-bottom: 2px solid var(--et-red); font-weight: 700; }
+        .chart-container { position: relative; width: 100%; height: 320px; margin: 2rem 0; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 8px; }
+        .sticky-nav { backdrop-filter: blur(12px); background: rgba(255, 241, 229, 0.95); border-bottom: 2px solid var(--ink-black); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin: 2.5rem 0; border: 1px solid #ddd; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        section { scroll-margin-top: 90px; }
-        .outlook-table th { @apply px-4 py-3 text-left text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-600; }
-        .outlook-table td { @apply px-4 py-4 text-sm border-b border-slate-100; }
+        section { scroll-margin-top: 90px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 3rem; }
+        .outlook-table th { @apply px-4 py-3 text-left text-xs font-bold uppercase tracking-wider bg-red-50 text-red-900 border-b-2 border-red-200; }
+        .outlook-table td { @apply px-4 py-4 text-sm border-b border-red-50; }
+        .masthead-title { font-size: clamp(2.5rem, 8vw, 5rem); letter-spacing: -0.02em; line-height: 0.95; }
+        .section-header { border-top: 4px solid var(--ink-black); border-bottom: 1px solid var(--ink-black); padding: 0.5rem 0; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="min-h-[500px] flex items-center justify-center text-center px-6 bg-slate-950 text-white relative overflow-hidden">
-        <div class="absolute inset-0 opacity-25 grayscale">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Mumbai_Metro_Line_1_Train.jpg" class="w-full h-full object-cover" alt="Mumbai Metro Infrastructure">
+    <header class="bg-[var(--paper-pink)] pt-8 pb-12 px-6 border-b-8 border-double border-gray-900 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Mumbai_Metro_Line_1_Train.jpg" class="w-full h-full object-cover" alt="">
         </div>
-        <div class="max-w-4xl mx-auto relative z-10 py-16">
-            <h4 class="uppercase tracking-[0.4em] text-[10px] mb-8 font-bold text-blue-400">Urban Analysis: 2014–2030</h4>
-            <h1 class="text-4xl md:text-7xl font-bold journal-serif leading-tight mb-8">The Steel Pulse of a Megacity</h1>
-            <p class="text-lg md:text-2xl font-light text-slate-300 journal-serif italic max-w-2xl mx-auto leading-relaxed">
-                Evaluating Mumbai’s $1.5 trillion gamble to reclaim its time, its dignity, and its future through a subterranean revolution.
-            </p>
-            <div class="mt-12 flex items-center justify-center space-x-4 text-[11px] text-slate-400 font-bold uppercase tracking-widest">
-                <span>Special Report</span>
-                <span class="w-8 h-px bg-slate-700"></span>
-                <span>January 2026</span>
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="flex justify-between items-center border-b border-gray-900 pb-2 mb-8 text-[10px] font-bold uppercase tracking-widest text-gray-800">
+                <span>Mumbai Edition</span>
+                <span class="text-2xl font-serif italic normal-case tracking-tight text-gray-900 font-black">Financial Analysis Unit</span>
+                <span>Thursday, Jan 15, 2026</span>
+            </div>
+            
+            <div class="text-center py-8">
+                <h4 class="uppercase tracking-[0.5em] text-[10px] mb-6 font-bold text-[var(--et-red)]">Urban Analysis: 2014–2030</h4>
+                <h1 class="masthead-title font-bold journal-serif mb-8 text-gray-900 uppercase">The Steel Pulse of a Megacity</h1>
+                <p class="text-xl md:text-2xl font-light text-gray-700 journal-serif italic max-w-3xl mx-auto leading-relaxed border-y border-gray-300 py-6">
+                    Evaluating Mumbai’s $1.5 trillion gamble to reclaim its time, its dignity, and its future through a subterranean revolution.
+                </p>
             </div>
         </div>
     </header>
 
-    <nav class="sticky-nav sticky top-0 z-50 border-b border-slate-200 py-4 shadow-sm">
-        <div class="max-w-5xl mx-auto px-6 flex space-x-8 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 overflow-x-auto whitespace-nowrap scrollbar-hide">
-            <a href="#prologue" class="nav-link hover:text-blue-700 transition-colors">Prologue</a>
-            <a href="#metamorphosis" class="nav-link hover:text-blue-700 transition-colors">Metamorphosis</a>
-            <a href="#infrastructure" class="nav-link hover:text-blue-700 transition-colors">Infrastructure</a>
-            <a href="#human" class="nav-link hover:text-blue-700 transition-colors">Commuter Impact</a>
-            <a href="#economy" class="nav-link hover:text-blue-700 transition-colors">Economic Significance</a>
-            <a href="#friction" class="nav-link hover:text-blue-700 transition-colors text-red-400">Friction</a>
-            <a href="#comparison" class="nav-link hover:text-blue-700 transition-colors">Comparison</a>
-            <a href="#references" class="nav-link hover:text-blue-700 transition-colors">Sources</a>
+    <nav class="sticky-nav sticky top-0 z-50 py-3 shadow-md">
+        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex space-x-6 text-[10px] font-bold uppercase tracking-wider text-gray-600 overflow-x-auto whitespace-nowrap scrollbar-hide py-1">
+                <a href="#prologue" class="nav-link hover:text-[var(--et-red)] transition-colors">Prologue</a>
+                <a href="#metamorphosis" class="nav-link hover:text-[var(--et-red)] transition-colors">Metamorphosis</a>
+                <a href="#infrastructure" class="nav-link hover:text-[var(--et-red)] transition-colors">Infrastructure</a>
+                <a href="#human" class="nav-link hover:text-[var(--et-red)] transition-colors">Commuter Impact</a>
+                <a href="#economy" class="nav-link hover:text-[var(--et-red)] transition-colors">Economy</a>
+                <a href="#friction" class="nav-link hover:text-[var(--et-red)] transition-colors text-red-600">Friction</a>
+                <a href="#comparison" class="nav-link hover:text-[var(--et-red)] transition-colors">Comparison</a>
+            </div>
+            <div class="hidden md:block">
+                <span class="text-[10px] font-bold text-[var(--et-red)] border border-[var(--et-red)] px-2 py-1 uppercase">Premium Report</span>
+            </div>
         </div>
     </nav>
 
-    <article class="max-w-3xl mx-auto px-6 py-20 bg-white">
+    <article class="max-w-4xl mx-auto px-6 md:px-12 py-16 bg-[var(--paper-pink)] shadow-[20px_0_50px_-20px_rgba(0,0,0,0.05),-20px_0_50px_-20px_rgba(0,0,0,0.05)]">
         
         <section id="prologue" class="mb-24">
-            <p class="dropcap journal-serif text-xl mb-8 text-slate-800 leading-relaxed">
+            <p class="dropcap journal-serif text-xl mb-8 text-gray-800 leading-relaxed">
                 Mumbai has always been defined by its frantic, unrelenting motion. For more than a century, the "Local" train was the city's undisputed lifeline—a rhythmic, rattling artery carrying eight million souls daily. Yet, for many, that lifeline was also a crucible. Urban planners used the clinical term "Super-Dense Crush Load" to describe a staggering reality: sixteen human beings squeezed into every square meter of space, a daily test of endurance that few cities on Earth could imagine.
             </p>
-            <p class="journal-serif text-xl text-slate-800 leading-relaxed">
+            <p class="journal-serif text-xl text-gray-800 leading-relaxed">
                 The Mumbai Metro project (2014–2030) is far more than a logistical upgrade; it is a fundamental renegotiation of the city's social contract. As the network expands from an initial 11-kilometer stretch into a sprawling 337-kilometer regional grid, it represents a bold attempt to solve Mumbai's most endemic crisis: <strong>Time Poverty.</strong>
             </p>
         </section>
 
         <section id="metamorphosis" class="mb-24">
-            <h2 class="text-3xl md:text-4xl font-bold journal-serif mb-6 border-b-2 border-slate-900 pb-3">
+            <h2 class="text-3xl md:text-4xl font-bold journal-serif mb-6 border-b-4 border-double border-gray-900 pb-3 uppercase tracking-tight">
                 The Great Metamorphosis: A City in Transition
             </h2>
             <p class="mb-6 leading-relaxed">
@@ -77,12 +86,12 @@
                 Between 2014 and 2030, Mumbai is undergoing a structural pivot, moving from an "island city" model to a vibrant "polycentric metropolitan region." This report examines the technical progress toward the 2026 milestones, the profound human impact on the workforce, and the economic ripple effects that are expected to propel the regional GDP toward a $1.5 trillion goal.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">The 2026 Roadmap: A Network Takes Shape</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">The 2026 Roadmap: A Network Takes Shape</h3>
             <p class="mb-6 leading-relaxed">
                 As of early 2026, the Mumbai Metro has graduated from a series of isolated corridors into a cohesive systemic network. The architecture of this transition rests on the successful launch of the first three phases and a critical expansion into the growing peripheral suburbs of Thane and Mira-Bhayandar.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">Operational Corridors: The New Normal</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">Operational Corridors: The New Normal</h4>
             <p class="mb-6 leading-relaxed">
                 The current operational network—including the Blue, Yellow, Red, and the now-essential Aqua Line 3—has begun to rewrite the daily commute. Line 1, the city's pioneering east-west link, remains a workhorse, now supplemented by newer corridors that are successfully drawing commuters away from gridlocked roads. Lines 2A and 7 have notably shifted the modal share from private vehicles, even achieving certified carbon neutrality in late 2025—a landmark for Indian infrastructure.
             </p>
@@ -90,12 +99,12 @@
                 The most significant milestone of late 2025 was the completion of the 33.5-kilometer underground Aqua Line 3. An engineering marvel that tunneled through the city’s complex geological and social layers, it connects the historic south with the bustling northern hubs. By December 2025, ridership on the Aqua Line surged to over 4.6 million passengers per month, a testament to the city's hunger for efficient, dignified transit. While early "network blackouts" in deep sections briefly tested commuter patience, the system has rapidly matured, signaling a new era of urban mobility.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The 2026 Expansion: Bridging the Divide</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The 2026 Expansion: Bridging the Divide</h4>
             <p class="mb-6 leading-relaxed">
                 The year 2026 is the pivot point for the network’s outward expansion. The focus is now on integrating satellite cities and completing the crucial east-west links that allow the city to bypass its traditional bottlenecks.
             </p>
 
-            <div class="overflow-x-auto rounded-lg border border-slate-200 mb-8 shadow-sm">
+            <div class="overflow-x-auto rounded-lg border border-gray-200 mb-8 shadow-sm">
                 <table class="min-w-full outlook-table">
                     <thead>
                         <tr>
@@ -153,7 +162,7 @@
                 In Thane, the Green Line (Lines 4 and 4A) has reached structural maturity. By late 2025, the viaducts and piers for this 32-kilometer artery were nearly complete. The "priority stretch" from Cadbury Junction to Gaimukh is expected to open by March 2026, providing immediate relief to the notoriously congested Ghodbunder Road. While aesthetic requirements for specialized station designs caused minor delays, the result is a network that is as visually distinctive as it is functional.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The "Switch Without a Hitch": Multi-Modal Integration</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The "Switch Without a Hitch": Multi-Modal Integration</h4>
             <p class="mb-6 leading-relaxed">
                 The success of a 337-kilometer network hinges on how easily a commuter can move between modes. The MMRDA’s "Switch Without a Hitch" program is redesigning 34 metro stations to integrate seamlessly with the suburban railway. This involves more than just physical proximity; it includes wider footpaths, dedicated bus bays, and advanced signaling to ensure that the transition from rail to road is safe and efficient.
             </p>
@@ -161,12 +170,12 @@
                 Digital integration is the other half of the story. The "Mumbai One" super-app, launched in late 2025, allows for a single QR-based ticket across 11 different public transport operators. It is a leap toward a "One Nation, One Mobility" future, though the system is still evolving to include return tickets and long-term passes for the suburban rail network—a final friction point that remains a priority for planners.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">The Human Dividend: Reclaiming the Commute</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">The Human Dividend: Reclaiming the Commute</h3>
             <p class="mb-6 leading-relaxed">
                 The ultimate measure of the Mumbai Metro is not in kilometers of track, but in the hours returned to its citizens. For generations, Mumbai’s workforce has endured some of the longest and most taxing commutes in the world. The metro is a direct intervention in this "time-poverty," aimed at improving both economic productivity and the psychological well-being of the city.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The Efficiency Dividend</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The Efficiency Dividend</h4>
             <p class="mb-6 leading-relaxed">
                 The metro network is engineered to slash travel times by 50% to 75%. A commute from Mira Road to Andheri, which previously took 90 grueling minutes by road, is projected to drop to under 50 minutes once Line 9 is fully optimized. Similarly, the Green Line 4 is expected to reduce the Thane-to-Wadala journey by 75%, allowing thousands of professionals to bypass the persistent gridlock of the Eastern Express Highway. This "time dividend" is not just a convenience; it is an unlocking of human capital that allows for greater labor participation and a reduction in the massive opportunity costs associated with urban congestion.
             </p>
@@ -174,7 +183,7 @@
                 In the critical east-west corridors, the Pink Line (Line 6) serves as a vital bypass for the Jogeshwari-Vikhroli Link Road. By covering the distance between Swami Samarth Nagar and Vikhroli in 30 fewer minutes, it provides a buffer against the city's notorious traffic, transforming a stressful journey into a predictable, air-conditioned ride.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">A Restoration of Dignity</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">A Restoration of Dignity</h4>
             <p class="mb-6 leading-relaxed">
                 The transition from the "survivalist" environment of the suburban railway to the climate-controlled metro coaches is more than a technological upgrade—it is a public health intervention. In a city where humidity and heat are constant companions, the predictable, safe, and comfortable metro environment significantly reduces the daily stress and mental fatigue that lead to workforce burnout.
             </p>
@@ -182,7 +191,7 @@
                 By providing a mode of travel where commuters can arrive at their destination with the same mental clarity they had when they left home, the metro enhances a sense of environmental mastery and autonomy. It is a modern, dignified alternative that respects the commuter’s time and well-being, potentially lowering the long-term societal costs associated with workplace stress and untreated mental health issues.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">Solving the "Last-Mile" Puzzle</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">Solving the "Last-Mile" Puzzle</h4>
             <p class="mb-6 leading-relaxed">
                 Even with high-speed tracks, the "last-mile" remains a critical challenge. Many suburban stations open into areas where footpaths are inconsistent or auto-rickshaw management is unorganized. The MMRDA is actively addressing this "walking vs. riding" dilemma by constructing skywalks and multi-modal hubs designed to facilitate seamless, door-to-door connectivity.
             </p>
@@ -190,12 +199,12 @@
                 In corporate hubs like the Bandra-Kurla Complex, innovative solutions like "pod taxis" are planned to link metro stations with office clusters, reducing the reliance on shuttle buses. While some premium last-mile options have emerged through private partnerships, the focus remains on ensuring that the entire transit ecosystem is inclusive and accessible to all segments of the population.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Economic Gravity: A $1.5 Trillion Ambition</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Economic Gravity: A $1.5 Trillion Ambition</h3>
             <p class="mb-6 leading-relaxed">
                 The Mumbai Metro is the logistical backbone of a grander vision: transforming the Mumbai Metropolitan Region into a $1.5 trillion economy by 2047. This objective requires a total restructuring of how the city uses its land, how its labor moves, and how it manages its environment.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The GDP Catalyst</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The GDP Catalyst</h4>
             <p class="mb-6 leading-relaxed">
                 The Economic Masterplan for the region envisions a five-fold increase in GDP by the nation’s centenary. This growth is predicated on an expanded metro network that facilitates the development of multiple international business centers. By providing the necessary mobility for a global workforce, the metro enables high-productivity sectors—from fintech to artificial intelligence—to flourish.
             </p>
@@ -203,7 +212,7 @@
                 The shift is also demographic. As growth moves toward metro-linked satellite cities, the regional GDP is becoming more distributed, moving away from a single "island city" model to a more resilient, polycentric metropolitan structure.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The "Metro Premium": A New Real Estate Landscape</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The "Metro Premium": A New Real Estate Landscape</h4>
             <p class="mb-6 leading-relaxed">
                 The "Metro Premium" has fundamentally altered property values across the region. Infrastructure-led development is driving a surge in residential and commercial interest in well-connected corridors. In northern suburbs like Mira Road and Bhayandar, buyers are increasingly valuing rapid transit over more central but congested locations, seeing the metro as a gateway to a higher quality of life.
             </p>
@@ -211,7 +220,7 @@
                 Thane, in particular, is witnessing a transformative decade. Market forecasts suggest significant appreciation as Lines 4 and 5 roll out, creating new "value clusters" around metro stations. While this growth risks pricing out some legacy residents, the move toward "Transit-Oriented Development" allows for the creation of denser, walkable neighborhoods that redefine urban living in India.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The Environmental Dividend</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The Environmental Dividend</h4>
             <p class="mb-6 leading-relaxed">
                 The environmental return on investment for the Mumbai Metro is substantial. By moving millions of daily passengers from road to rail, the network is a major contributor to the city's net-zero transition. Analysis suggests that a significant portion of metro riders are shifting from high-intensity emitters like two-wheelers and auto-rickshaws.
             </p>
@@ -219,12 +228,12 @@
                 The result is a measurable reduction in daily $CO_2$ emissions. Metro Lines 2A and 7 have already achieved landmark certifications for carbon neutrality, and as the system increasingly relies on renewable energy, it is poised to become a net-zero asset that safeguards the city's future.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">The Price of Progress: Navigating Friction</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">The Price of Progress: Navigating Friction</h3>
             <p class="mb-6 leading-relaxed">
                 The expansion of the Mumbai Metro has not been without its challenges. It is a journey marked by institutional friction, fiscal concerns, and the complex social contradictions of a megacity in motion.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The Affordability Question</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The Affordability Question</h4>
             <p class="mb-6 leading-relaxed">
                 A critical point of debate is the "Affordability Gap." Mumbai’s local trains offer one of the most subsidized transit models in the world. In contrast, the metro is a "premium" choice, with monthly costs that can be significantly higher. For the city’s working class, the metro must eventually become as accessible as the suburban rail to fulfill its potential as a true "lifeline."
             </p>
@@ -232,7 +241,7 @@
                 This disparity highlights a central challenge: ensuring that as the middle class migrates to the air-conditioned metro, the lower-income workforce is not left behind in a depleting bus fleet. For the metro to be truly transformative, pricing and integration must respect the economic reality of all Mumbaikars.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">The Depot Saga and Fiscal Realities</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">The Depot Saga and Fiscal Realities</h4>
             <p class="mb-6 leading-relaxed">
                 The "depot saga" has become a symbol of the conflict between infrastructure and environmental preservation. Legal and political delays, particularly at Aarey Colony, have added significant costs to the project. While technical workarounds have allowed for phased openings, the long-term fiscal viability of such massive, debt-driven infrastructure remains a subject of intense discussion.
             </p>
@@ -240,8 +249,8 @@
                 These challenges serve as a reminder that building a megacity’s spine is as much about political and social consensus as it is about engineering. As Mumbai moves toward its 2030 goals, the lessons learned from these frictions will be invaluable for urban India.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">2026 Outlook Summary Table</h4>
-            <div class="overflow-x-auto rounded-lg border border-slate-200 mb-8 shadow-sm">
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">2026 Outlook Summary Table</h4>
+            <div class="overflow-x-auto rounded-lg border border-gray-200 mb-8 shadow-sm">
                 <table class="min-w-full outlook-table">
                     <thead>
                         <tr>
@@ -290,38 +299,38 @@
                 </table>
             </div>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Lessons for a Moving Nation</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Lessons for a Moving Nation</h3>
             <p class="mb-6 leading-relaxed">
                 The Mumbai Metro project offers a masterclass in the complexities of modernizing a megacity. The transition from a single-line experiment to a regional grid reveals both the immense power of high-capacity transit and the pitfalls of fragmented urban planning.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div>
-                    <h5 class="font-bold text-slate-800 mb-2">The Digital Imperative</h5>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h5 class="font-bold text-gray-800 mb-2">The Digital Imperative</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         Mumbai’s success with unified ticketing demonstrates that digital integration is as critical as the physical tracks. Future urban projects must build integrated mobility stacks from day one to ensure a seamless commuter experience.
                     </p>
                 </div>
                 <div>
-                    <h5 class="font-bold text-slate-800 mb-2">Planning Beyond Silos</h5>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h5 class="font-bold text-gray-800 mb-2">Planning Beyond Silos</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         The depot stalemates highlight the risks of planning in isolation. Indian cities must designate "integrated transit hubs" early in the process to avoid the fiscal and temporal penalties of land-ownership disputes.
                     </p>
                 </div>
                 <div>
-                    <h5 class="font-bold text-slate-800 mb-2">The New Social Compact</h5>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h5 class="font-bold text-gray-800 mb-2">The New Social Compact</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         The metro has revived middle-class participation in urban welfare. Planners should view this articulate and engaged workforce as a partner in design rather than a force to be managed.
                     </p>
                 </div>
                 <div>
-                    <h5 class="font-bold text-slate-800 mb-2">Sustainability through Development</h5>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h5 class="font-bold text-gray-800 mb-2">Sustainability through Development</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         To achieve long-term viability, cities must focus on aggressive "Transit-Oriented Development" and land-value capture, ensuring that infrastructure funds itself through the growth it creates.
                     </p>
                 </div>
                 <div>
-                    <h5 class="font-bold text-slate-800 mb-2">Inclusivity as a Metric</h5>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h5 class="font-bold text-gray-800 mb-2">Inclusivity as a Metric</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         The "Affordability Gap" remains a significant challenge. To avoid creating a two-tiered city, planners must ensure that the metro is accessible to all, integrating low-cost feeders and respecting the economic reality of the working class.
                     </p>
                 </div>
@@ -332,24 +341,24 @@
         </section>
 
         <section id="infrastructure" class="mb-24">
-            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-2 border-slate-900 pb-3">I. The Steel Grid: A Network Consolidates</h2>
+            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-4 border-double border-gray-900 pb-3 uppercase tracking-tight">I. The Steel Grid: A Network Consolidates</h2>
             <p class="mb-8 leading-relaxed">
                 In early 2026, the Mumbai Metro is rapidly consolidating its presence. The operational corridors—Lines 1, 2A, 7, and the initial phase of Aqua Line 3—have already begun to ease the burden on the Western Express Highway, proving that a reliable alternative can fundamentally change how Mumbaikars move.
             </p>
 
-            <div class="my-12 bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-sm text-center">
-                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">A Vision in Motion</h4>
+            <div class="my-12 bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm text-center">
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">A Vision in Motion</h4>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Mumbai_Metro_and_Suburban_Railway_Schematic_Map.svg" 
                      class="w-full h-auto rounded shadow-lg hover:ring-4 ring-blue-500/20 transition-all cursor-zoom-in" 
                      alt="Mumbai Metro Map"
                     onclick="window.open('https://commons.wikimedia.org/wiki/File:Mumbai_Metro_and_Suburban_Railway_Schematic_Map.svg', '_blank')">
-                <p class="text-[10px] text-slate-400 mt-4 italic">The evolving Metro grid, designed to complement the historic suburban railway. (Source: Wikimedia Commons)</p>
+                <p class="text-[10px] text-gray-400 mt-4 italic">The evolving Metro grid, designed to complement the historic suburban railway. (Source: Wikimedia Commons)</p>
             </div>
 
-            <h3 class="text-2xl font-bold journal-serif mb-6 text-slate-800">2026: The Year of Connection</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-6 text-gray-800">2026: The Year of Connection</h3>
             <p class="mb-8">This year marks a series of phased openings for critical corridors that are set to finally bridge the city's east-west divide:</p>
             
-            <div class="overflow-x-auto rounded-lg border border-slate-200 mb-12 shadow-sm">
+            <div class="overflow-x-auto rounded-lg border border-gray-200 mb-12 shadow-sm">
                 <table class="min-w-full outlook-table">
                     <thead>
                         <tr>
@@ -360,17 +369,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Line 4 (Green)</strong><br><span class="text-[10px] text-slate-500">Wadala-Thane</span></td>
+                            <td><strong>Line 4 (Green)</strong><br><span class="text-[10px] text-gray-500">Wadala-Thane</span></td>
                             <td>Phased Operations</td>
                             <td>Civil work nearing completion; depot integration in progress.</td>
                         </tr>
                         <tr>
-                            <td><strong>Line 6 (Pink)</strong><br><span class="text-[10px] text-slate-500">Lokhandwala-Vikhroli</span></td>
+                            <td><strong>Line 6 (Pink)</strong><br><span class="text-[10px] text-gray-500">Lokhandwala-Vikhroli</span></td>
                             <td>Partial Opening</td>
                             <td>Final stages of JVLR integration and bridge testing.</td>
                         </tr>
                         <tr>
-                            <td><strong>Line 9 (Red)</strong><br><span class="text-[10px] text-slate-500">Dahisar-Mira Road</span></td>
+                            <td><strong>Line 9 (Red)</strong><br><span class="text-[10px] text-gray-500">Dahisar-Mira Road</span></td>
                             <td>Full Integration</td>
                             <td>A critical link for the northern suburbs, now in final testing.</td>
                         </tr>
@@ -388,7 +397,7 @@
         </section>
 
         <section id="human" class="mb-24">
-            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-2 border-slate-900 pb-3">II. The Human Lens: Reclaiming Time</h2>
+            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-4 border-double border-gray-900 pb-3 uppercase tracking-tight">II. The Human Lens: Reclaiming Time</h2>
             <p class="mb-8">
                 The impact of the metro is best measured in the hours it returns to its people. A commute from Thane to South Mumbai, once an arduous 90-minute journey, is set to be nearly halved. For millions, this is more than just transit; it is a restoration of nearly two hours of life every single day.
             </p>
@@ -396,15 +405,15 @@
             <div class="video-wrapper">
                 <iframe src="https://www.youtube.com/embed/fYoRxkeIiq0" title="Mumbai Metro Line 3 Trial Runs" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <p class="text-center text-[11px] text-slate-400 mb-12 italic">Trial runs of Mumbai Metro Line 3: A glimpse into the future of urban mobility. (Source: MMRC)</p>
+            <p class="text-center text-[11px] text-gray-400 mb-12 italic">Trial runs of Mumbai Metro Line 3: A glimpse into the future of urban mobility. (Source: MMRC)</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
                 <div>
-                    <h4 class="font-bold text-lg mb-4 text-slate-800">A New Quality of Life</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                    <h4 class="font-bold text-lg mb-4 text-gray-800">A New Quality of Life</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-4">
                         The shift to climate-controlled metro coaches is a significant public health milestone. In a city where the heat and noise of the commute have long contributed to workforce fatigue, the metro offers a predictable, dignified environment that preserves mental clarity and boosts daily productivity.
                     </p>
-                    <div class="p-4 bg-blue-50 border-l-4 border-blue-600 rounded text-xs text-blue-800 font-medium">
+                    <div class="p-6 bg-red-50 border-l-8 border-[var(--et-red)] text-sm text-red-900 font-serif italic shadow-sm">
                         "The metro offers more than just speed; it offers a sense of dignity that transforms the daily grind into a manageable journey."
                     </div>
                 </div>
@@ -413,39 +422,39 @@
                 </div>
             </div>
 
-            <h3 class="text-2xl font-bold journal-serif mb-6 text-slate-800">The Last-Mile Challenge</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-6 text-gray-800">The Last-Mile Challenge</h3>
             <p class="mb-8 leading-relaxed">
                 Despite the state-of-the-art tracks, the "last-mile" remains a focal point for improvement. In areas like Andheri East, the transition from station to destination is being prioritized, with new footpaths, skywalks, and organized transport hubs designed to ensure that the journey is seamless from start to finish.
             </p>
         </section>
 
         <section id="economy" class="mb-24">
-            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-2 border-slate-900 pb-3">III. Economic Gravity: Building the Future</h2>
+            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-4 border-double border-gray-900 pb-3 uppercase tracking-tight">III. Economic Gravity: Building the Future</h2>
             <p class="mb-8">
                 Mumbai’s ambition to become a $1.5 trillion economy by 2047 is a bold vision that relies on the success of its infrastructure. By de-clogging major business hubs like BKC and SEEPZ, the metro is projected to unlock billions in annual productivity gains, creating a more efficient and competitive regional economy.
             </p>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 my-12">
-                <div class="bg-slate-900 text-white p-8 rounded-2xl shadow-xl">
-                    <h4 class="text-blue-400 font-bold uppercase text-[10px] tracking-widest mb-4">The New Suburbs</h4>
-                    <p class="text-sm text-slate-400 mb-6">The "Metro Premium" is already reshaping the city's outskirts. Northern suburbs like Mira Road and Bhayandar have seen a surge in interest as rapid transit makes them more accessible, attracting new residents and high-value services to areas once considered remote.</p>
-                    <div class="chart-container" style="height: 200px;">
+                <div class="bg-white border-2 border-gray-900 p-8 shadow-[8px_8px_0_0_rgba(0,0,0,0.1)]">
+                    <h4 class="text-[var(--et-red)] font-bold uppercase text-[10px] tracking-widest mb-4">The New Suburbs</h4>
+                    <p class="text-sm text-gray-700 mb-6 font-medium">The "Metro Premium" is already reshaping the city's outskirts. Northern suburbs like Mira Road and Bhayandar have seen a surge in interest as rapid transit makes them more accessible, attracting new residents and high-value services to areas once considered remote.</p>
+                    <div class="chart-container" style="height: 200px; background: transparent; border: none;">
                         <canvas id="realEstateChart"></canvas>
                     </div>
                 </div>
                 <div class="flex flex-col justify-center">
                     <h4 class="font-bold text-lg mb-4">A Greener City</h4>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6">
                         Moving millions of daily passengers to electric rail is a cornerstone of Mumbai's environmental strategy. This shift is expected to remove hundreds of thousands of carbon-heavy vehicles from the road, serving as a primary driver for the city's transition toward a net-zero future.
                     </p>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 border border-slate-100 rounded bg-slate-50">
+                        <div class="p-4 border border-gray-100 rounded bg-gray-50">
                             <div class="text-2xl font-bold text-green-600">260k</div>
-                            <div class="text-[10px] text-slate-400 uppercase font-bold">Tons CO2 saved annually</div>
+                            <div class="text-[10px] text-gray-400 uppercase font-bold">Tons CO2 saved annually</div>
                         </div>
-                        <div class="p-4 border border-slate-100 rounded bg-slate-50">
-                            <div class="text-2xl font-bold text-blue-600">45%</div>
-                            <div class="text-[10px] text-slate-400 uppercase font-bold">Projected De-congestion</div>
+                        <div class="p-4 border border-gray-100 rounded bg-gray-50">
+                            <div class="text-2xl font-bold text-[var(--et-red)]">45%</div>
+                            <div class="text-[10px] text-gray-400 uppercase font-bold">Projected De-congestion</div>
                         </div>
                     </div>
                 </div>
@@ -453,7 +462,7 @@
         </section>
 
         <section id="friction" class="mb-24">
-            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-2 border-slate-900 pb-3 text-red-800">IV. Friction: Navigating the Hurdles</h2>
+            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-4 border-double border-gray-900 pb-3 uppercase tracking-tight text-red-800">IV. Friction: Navigating the Hurdles</h2>
             <p class="mb-8 leading-relaxed">
                 The path to progress is rarely linear. One of the most significant hurdles remains the "Affordability Gap." While the metro offers a modern alternative, its pricing must eventually align with the economic realities of all commuters to ensure it becomes a truly inclusive lifeline for the city.
             </p>
@@ -462,39 +471,39 @@
                 <canvas id="affordabilityChart"></canvas>
             </div>
 
-            <p class="mb-8 font-semibold text-slate-800">
+            <p class="mb-8 font-semibold text-gray-800">
                 While delays and controversies have added to the project's complexity, they have also provided valuable lessons in urban planning and social consensus. The focus now is on ensuring that the metro's long-term benefits far outweigh the initial challenges of its creation.
             </p>
 
             <div class="video-wrapper">
                 <iframe src="https://www.youtube.com/embed/f7EwFVlthL0" title="Aarey Depot Progress Update" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <p class="text-center text-[11px] text-slate-400 italic">Ongoing progress at the Aarey depot: Infrastructure momentum meets civic engagement. (Source: MMRC)</p>
+            <p class="text-center text-[11px] text-gray-400 italic">Ongoing progress at the Aarey depot: Infrastructure momentum meets civic engagement. (Source: MMRC)</p>
         </section>
 
         <section id="comparison" class="mb-24">
-            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-2 border-slate-900 pb-3">V. The Global Context: A Trans-Continental View</h2>
-            <p class="text-sm uppercase tracking-[0.3em] text-slate-400 mb-6">
+            <h2 class="text-4xl font-bold journal-serif mb-8 border-b-4 border-double border-gray-900 pb-3 uppercase tracking-tight">V. The Global Context: A Trans-Continental View</h2>
+            <p class="text-sm uppercase tracking-[0.3em] text-gray-400 mb-6">
                 Analyzing Mumbai’s Transformation (2014–2030)
             </p>
             <p class="mb-8 leading-relaxed">
                 Global Benchmarking • Strategic Insights • The Road Ahead
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Executive Perspective</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Executive Perspective</h3>
             <p class="mb-10 leading-relaxed">
                 The Mumbai Metro is more than just a transportation project; it is a civilizational step forward. It represents one of the largest simultaneous urban infrastructure overhauls in history, benchmarking Mumbai against global hubs like Tokyo, Hong Kong, and London. By analyzing financial models, engineering geology, and sociological impacts, we can see how this "Great Urban Rewiring" is setting the stage for the city's future.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Part I: The Financial Engine</h3>
-            <p class="mb-4 text-slate-600 italic">Moving beyond the tracks to the investment that builds them.</p>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Part I: The Financial Engine</h3>
+            <p class="mb-4 text-gray-600 italic">Moving beyond the tracks to the investment that builds them.</p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">1. Financing Models: A Hybrid Approach</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">1. Financing Models: A Hybrid Approach</h4>
             <p class="mb-4 leading-relaxed">
                 Mumbai has experimented with a variety of funding models, moving away from purely government-backed projects toward a more diversified approach. The early Public-Private Partnership for Line 1 provided valuable lessons in the challenges of balancing private profit with public utility. In contrast, the use of soft loans from international agencies like JICA for the Aqua Line represents a more sustainable, long-term strategy, though it requires careful management of international fiscal risks.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">2. Value Capture: Financing through Growth</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">2. Value Capture: Financing through Growth</h4>
             <p class="mb-2 leading-relaxed">
                 The city is also exploring innovative "Value Capture" mechanisms, such as increasing the permissible construction density near metro stations. By allowing for more intensive development in these areas, the state can generate revenue through premiums that directly fund further infrastructure projects. This model encourages the creation of vibrant, transit-oriented neighborhoods while providing a steady stream of investment for the network's expansion.
             </p>
@@ -502,10 +511,10 @@
                 While this approach depends on a healthy real estate market, it represents a proactive way to ensure that the growth catalyzed by the metro is used to sustain it.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Part II: The Engineering Frontier</h3>
-            <p class="mb-4 text-slate-600 italic">Constructing a spine for a megacity.</p>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Part II: The Engineering Frontier</h3>
+            <p class="mb-4 text-gray-600 italic">Constructing a spine for a megacity.</p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">1. The Geological Challenge</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">1. The Geological Challenge</h4>
             <p class="mb-2 leading-relaxed">
                 Building beneath Mumbai is a unique challenge. The city’s geography consists of hard rock intermixed with reclaimed land and marshy areas. The completion of the Aqua Line 3 required operating multiple Tunnel Boring Machines simultaneously under historic buildings and active social layers—a feat of engineering that has set new standards for urban tunneling.
             </p>
@@ -513,105 +522,105 @@
                 Furthermore, the proximity to the sea requires specialized engineering to protect the network from saline ingress, ensuring that the system remains resilient in the face of long-term environmental shifts.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">2. The Art of Integration</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">2. The Art of Integration</h4>
             <p class="mb-8 leading-relaxed">
                 Perhaps the greatest engineering challenge is not building the tracks themselves, but integrating them into the existing city. Projects like the "Dadar Knot," which connects multiple rail lines and the metro in a single, high-traffic hub, require the precision of open-heart surgery on a city that never stops moving. This focus on seamless integration is what will ultimately define the metro's success.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Part III: The Sociology of Speed</h3>
-            <p class="mb-4 text-slate-600 italic">Rewriting the social contract through infrastructure.</p>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Part III: The Sociology of Speed</h3>
+            <p class="mb-4 text-gray-600 italic">Rewriting the social contract through infrastructure.</p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">1. A Revolution in Mobility</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">1. A Revolution in Mobility</h4>
             <p class="mb-2 leading-relaxed">
                 The metro is significantly expanding mobility for all, particularly for women in the workforce. By providing a safe, well-lit, and monitored environment, the network extends the "working day" and makes more distant service hubs accessible. This "dignified mobility" is expected to contribute to a notable increase in workforce participation from the suburbs.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">2. The Polycentric Shift</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">2. The Polycentric Shift</h4>
             <p class="mb-2 leading-relaxed">
                 For decades, Mumbai’s development was largely linear. The new metro grid is creating a more distributed, "polycentric" city. New business districts are emerging in areas like Kanjurmarg and Vikhroli, breaking the old hierarchy of "town" versus "suburbs" and creating a more balanced urban landscape similar to that of London or Tokyo.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">3. Evolution of the Neighborhood</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">3. Evolution of the Neighborhood</h4>
             <p class="mb-8 leading-relaxed">
                 The metro is also triggering a redevelopment of older neighborhoods. While this brings modern housing and improved amenities, it also necessitates a careful approach to ensure that the city's growth remains inclusive and that the workforce that serves Mumbai can continue to live within its reach.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Part IV: Global Benchmarking</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Part IV: Global Benchmarking</h3>
 
-            <h4 class="text-xl font-bold journal-serif mb-3 text-slate-800">1. Lessons from Tokyo: The Power of the Loop</h4>
+            <h4 class="text-xl font-bold journal-serif mb-3 text-gray-800">1. Lessons from Tokyo: The Power of the Loop</h4>
             <p class="mb-6 leading-relaxed">
                 Tokyo’s Yamanote Line demonstrates the power of a loop that connects all major hubs. While Mumbai is currently building a "ladder" of lines, prioritizing integration between its east-west corridors will simulate this loop effect, creating a more resilient and interconnected network.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-3 text-slate-800">2. Lessons from London: Agglomeration Economics</h4>
+            <h4 class="text-xl font-bold journal-serif mb-3 text-gray-800">2. Lessons from London: Agglomeration Economics</h4>
             <p class="mb-6 leading-relaxed">
                 London’s Elizabeth Line showed how high-capacity transit can boost productivity by connecting key finance and tech hubs. Mumbai’s Aqua Line is set to do the same, effectively increasing the "density of talent" by reducing travel times between the city's major business districts.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-3 text-slate-800">3. Lessons from Hong Kong: The Station as a Destination</h4>
+            <h4 class="text-xl font-bold journal-serif mb-3 text-gray-800">3. Lessons from Hong Kong: The Station as a Destination</h4>
             <p class="mb-6 leading-relaxed">
                 In Hong Kong, metro stations are often integrated with commercial and retail hubs. Mumbai is moving in this direction, with plans to develop station complexes that serve as destinations in themselves, helping to subsidize transit costs through non-fare revenue.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-3 text-slate-800">4. Lessons from New York: The Importance of Maintenance</h4>
+            <h4 class="text-xl font-bold journal-serif mb-3 text-gray-800">4. Lessons from New York: The Importance of Maintenance</h4>
             <p class="mb-10 leading-relaxed">
                 New York’s subway serves as a reminder of the importance of consistent maintenance. Mumbai is proactively establishing funds for asset replacement and signaling upgrades, ensuring that the network remains reliable for decades to come.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">Part V: The 2050 Horizon</h3>
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">1. Climate Resilience</h4>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">Part V: The 2050 Horizon</h3>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">1. Climate Resilience</h4>
             <p class="mb-6 leading-relaxed">
                 The metro is Mumbai's most climate-resilient transit option. While other projects focus on private vehicles, the metro encourages a shift to public, electric rail, significantly reducing the city's carbon footprint and setting it on a path toward a more sustainable future.
             </p>
 
-            <h4 class="text-xl font-bold journal-serif mb-4 text-slate-800">2. The Digital Future</h4>
+            <h4 class="text-xl font-bold journal-serif mb-4 text-gray-800">2. The Digital Future</h4>
             <p class="mb-8 leading-relaxed">
                 By 2030, the metro will be as much about data as it is about trains. From dynamic pricing that balances peak loads to autonomous pod systems for the last mile, the network is set to become a truly "smart" mobility system that adapts to the needs of its citizens.
             </p>
 
-            <h3 class="text-2xl font-bold journal-serif mb-5 text-slate-800">VI. Strategic Outlook</h3>
+            <h3 class="text-2xl font-bold journal-serif mb-5 text-gray-800">VI. Strategic Outlook</h3>
             <p class="mb-2 leading-relaxed">
                 The creation of a unified transport authority is a key goal, ensuring that buses, trains, and the metro operate as a single, cohesive system. Coupled with a significant investment in pedestrian infrastructure and a focus on non-fare revenue, Mumbai is well-positioned to create a world-class transit ecosystem.
             </p>
             <p class="mb-6 leading-relaxed">
                 As the city moves forward, the focus remains on inclusivity, efficiency, and the relentless pursuit of a better quality of life for all its residents.
             </p>
-            <p class="text-xs text-slate-500">
+            <p class="text-xs text-gray-500">
                 Analysis based on MMRDA master plans, global urban studies, and comparative transit metrics (2014–2026).
             </p>
         </section>
 
-        <section class="mb-24 pt-16 border-t-4 border-slate-900">
+        <section class="mb-24 pt-16 border-t-4 border-gray-900">
             <h2 class="text-4xl font-bold journal-serif mb-8">A Blueprint for Urban India</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
-                    <h4 class="font-bold text-slate-800 mb-3">1. Integration as a Priority</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h4 class="font-bold text-gray-800 mb-3">1. Integration as a Priority</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         Mumbai’s experience proves that planning for the "last mile" is as essential as laying the tracks themselves. Future urban projects across India can look to Mumbai’s multi-modal hubs as a blueprint for success.
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-800 mb-3">2. Inclusivity and Viability</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
+                    <h4 class="font-bold text-gray-800 mb-3">2. Inclusivity and Viability</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed">
                         To truly transform a city, transit must be accessible to everyone. By balancing modern technology with affordability, Mumbai is demonstrating how public capital can be used to create a more equitable urban future.
                     </p>
                 </div>
             </div>
         </section>
 
-        <section id="references" class="pt-16 border-t border-slate-200 text-xs text-slate-400">
-            <h3 class="font-bold mb-8 text-slate-900 uppercase tracking-widest text-[10px]">Reference Index & Sourcing</h3>
+        <section id="references" class="pt-16 border-t border-gray-200 text-xs text-gray-400">
+            <h3 class="font-bold mb-8 text-gray-900 uppercase tracking-widest text-[10px]">Reference Index & Sourcing</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div>
                     <ul class="space-y-3">
-                        <li>• <a href="https://mmrda.maharashtra.gov.in" class="hover:underline text-blue-700">MMRDA Strategic Masterplan 2031 (Primary Document)</a></li>
-                        <li>• <a href="https://mmrc.com" class="hover:underline text-blue-700">Mumbai Metro Rail Corp: Line 3 Aqua Project Progress (2025)</a></li>
+                        <li>• <a href="https://mmrda.maharashtra.gov.in" class="hover:underline text-[var(--et-red)]">MMRDA Strategic Masterplan 2031 (Primary Document)</a></li>
+                        <li>• <a href="https://mmrc.com" class="hover:underline text-[var(--et-red)]">Mumbai Metro Rail Corp: Line 3 Aqua Project Progress (2025)</a></li>
                         <li>• World Bank Report: "Urban Mobility Stress & Productivity in MMR" (2024)</li>
                     </ul>
                 </div>
                 <div>
                     <ul class="space-y-3">
-                        <li>• Wikipedia: <a href="https://en.wikipedia.org/wiki/Mumbai_Metro" class="hover:underline text-blue-700">Mumbai Metro Schematic Map Data</a></li>
+                        <li>• Wikipedia: <a href="https://en.wikipedia.org/wiki/Mumbai_Metro" class="hover:underline text-[var(--et-red)]">Mumbai Metro Schematic Map Data</a></li>
                         <li>• NITI Aayog: "Infrastructure ROI in Tier-1 Indian Cities" (2023)</li>
                         <li>• Maharashtra Dept of Housing: "Metro-Adjacent Real Estate Price Tracking"</li>
                     </ul>
@@ -624,21 +633,22 @@
 
     </article>
 
-    <footer class="bg-slate-50 py-20 text-center border-t border-slate-100">
+    <footer class="bg-[var(--paper-pink)] py-24 text-center border-t-8 border-double border-gray-900">
         <div class="max-w-4xl mx-auto px-6">
-            <h2 class="journal-serif text-3xl font-bold mb-8 text-slate-900">A City Reborn in Steel</h2>
-            <div class="flex justify-center space-x-4">
-                <span class="w-12 h-1 bg-blue-600 rounded"></span>
-                <span class="w-12 h-1 bg-red-600 rounded"></span>
-                <span class="w-12 h-1 bg-teal-600 rounded"></span>
+            <h2 class="journal-serif text-4xl font-bold mb-8 text-gray-900 uppercase tracking-tighter">A City Reborn in Steel</h2>
+            <div class="flex justify-center space-x-4 mb-12">
+                <span class="w-16 h-1 bg-[var(--et-red)]"></span>
+                <span class="w-16 h-1 bg-gray-900"></span>
+                <span class="w-16 h-1 bg-[var(--et-red)]"></span>
             </div>
+            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500">© 2026 Strategic Research Unit</p>
         </div>
     </footer>
 
     <script>
 
         function initCharts() {
-            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.color = '#4a5568';
             Chart.defaults.font.family = "'Inter', sans-serif";
 
             new Chart(document.getElementById('growthChart').getContext('2d'), {
@@ -648,8 +658,8 @@
                     datasets: [{
                         label: 'Operational Km',
                         data: [11.4, 46.4, 180, 337],
-                        backgroundColor: '#1d4ed8',
-                        borderRadius: 6
+                        backgroundColor: '#ed1c24',
+                        borderRadius: 0
                     }]
                 },
                 options: { 
@@ -657,7 +667,7 @@
                     maintainAspectRatio: false,
                     plugins: { 
                         legend: { display: false },
-                        title: { display: true, text: 'Network Scale Evolution (Km)', color: '#1e293b', font: { size: 14, weight: 'bold' } }
+                        title: { display: true, text: 'Network Scale Evolution (Km)', color: '#1a1a1a', font: { size: 14, weight: 'bold' } }
                     },
                     scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
                 }
@@ -669,17 +679,18 @@
                     labels: ['Suburban Rail (Peak)', 'Mumbai Metro', 'Ideal Standard'],
                     datasets: [{
                         data: [16, 8, 4],
-                        backgroundColor: ['#b91c1c', '#1d4ed8', '#10b981'],
-                        borderWidth: 0
+                        backgroundColor: ['#ed1c24', '#1a1a1a', '#4a5568'],
+                        borderWidth: 2,
+                        borderColor: '#fff1e5'
                     }]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    cutout: '75%',
+                    cutout: '70%',
                     plugins: { 
                         legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
-                        title: { display: true, text: 'Crush Load: Pax / Sqm', color: '#1e293b' }
+                        title: { display: true, text: 'Crush Load: Pax / Sqm', color: '#1a1a1a' }
                     }
                 }
             });
@@ -689,15 +700,15 @@
                 data: {
                     labels: ['2018', '2020', '2022', '2024', '2026'],
                     datasets: [
-                        { label: 'Mira Rd', data: [6800, 7100, 8900, 11200, 12800], borderColor: '#60a5fa', tension: 0.3, pointRadius: 3 },
-                        { label: 'Thane', data: [11500, 11800, 14200, 17500, 19800], borderColor: '#1d4ed8', tension: 0.3, pointRadius: 3 }
+                        { label: 'Mira Rd', data: [6800, 7100, 8900, 11200, 12800], borderColor: '#ed1c24', tension: 0, pointRadius: 4, borderWidth: 3 },
+                        { label: 'Thane', data: [11500, 11800, 14200, 17500, 19800], borderColor: '#1a1a1a', tension: 0, pointRadius: 4, borderWidth: 3 }
                     ]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } },
-                    scales: { y: { grid: { color: '#1e293b' } }, x: { grid: { display: false } } }
+                    plugins: { legend: { labels: { color: '#1a1a1a', font: { size: 10, weight: 'bold' } } } },
+                    scales: { y: { grid: { color: '#e2e8f0' } }, x: { grid: { display: false } } }
                 }
             });
 
@@ -708,8 +719,8 @@
                     datasets: [{
                         label: 'Monthly Cost (INR)',
                         data: [450, 2600, 4800, 8500],
-                        backgroundColor: ['#10b981', '#1d4ed8', '#f59e0b', '#b91c1c'],
-                        borderRadius: 4
+                        backgroundColor: ['#4a5568', '#ed1c24', '#1a1a1a', '#718096'],
+                        borderRadius: 0
                     }]
                 },
                 options: { 
@@ -717,7 +728,7 @@
                     maintainAspectRatio: false,
                     plugins: { 
                         legend: { display: false },
-                        title: { display: true, text: 'The Monthly Cost Gap (INR)', color: '#1e293b' }
+                        title: { display: true, text: 'The Monthly Cost Gap (INR)', color: '#1a1a1a' }
                     }
                 }
             });
