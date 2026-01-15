@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mumbai Metro 2030: Urban Transformation Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin: 0 auto; height: 350px; max-height: 400px; }
+        .nav-active { border-bottom: 2px solid #0f172a; color: #0f172a; font-weight: 600; }
+        .nav-item { cursor: pointer; transition: all 0.2s; }
+        .nav-item:hover { color: #334155; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .metro-line-bar { height: 8px; border-radius: 4px; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Slate/Gray backgrounds) with Metro Line Colors (Yellow, Red, Aqua, Pink, Green) as functional accents. -->
+    <!-- Application Structure Plan: Dashboard Layout. 
+         Header: Global context.
+         Nav: Tab-based switching between 4 Core Modules (Network, Commuter, Economy, Challenges). 
+         Why: Allows users to focus on one dimension of the complex study at a time (e.g., just the infrastructure or just the economics) without endless scrolling.
+         Interactions: "Commuter Calculator" to personalize data, Chart toggles to view trends, clickable cards for specific line details.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Network Growth: Bar Chart (Inform) -> Shows massive scale up from 2014 to 2030.
+         2. Commuter Calc: Interactive DOM inputs (Inform/Compare) -> Calculates time saved vs cost incurred for specific routes.
+         3. Crush Load: Bar Chart (Compare) -> Visually demonstrates the "Quality of Life" improvement (Pax/sq m).
+         4. Real Estate: Line Chart (Trends) -> Shows price impact over time.
+         5. 2026 Outlook: Styled HTML Table (Organize) -> Clear, dense summary of future milestones.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="h-8 w-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold mr-3">M</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900">Mumbai Metro Impact Study</h1>
+                        <p class="text-xs text-slate-500">2014–2030 Strategic Analysis</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <span class="nav-item nav-active" onclick="switchView('network')">Infrastructure & Roadmap</span>
+                    <span class="nav-item" onclick="switchView('commuter')">The Commuter Lens</span>
+                    <span class="nav-item" onclick="switchView('economy')">Economic Impact</span>
+                    <span class="nav-item" onclick="switchView('outlook')">Challenges & Outlook</span>
+                </div>
+                <!-- Mobile Menu Button (simplified functionality for demo) -->
+                <button class="md:hidden text-slate-500" onclick="alert('Please view on a larger screen for the best dashboard experience.')">Menu</button>
+            </div>
+        </div>
+        <!-- Mobile Nav Placeholder -->
+        <div class="md:hidden flex justify-around border-t border-slate-100 py-2 bg-slate-50 text-xs">
+            <span onclick="switchView('network')">Network</span>
+            <span onclick="switchView('commuter')">Commuter</span>
+            <span onclick="switchView('economy')">Economy</span>
+            <span onclick="switchView('outlook')">Outlook</span>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow bg-slate-50 p-4 sm:p-8 overflow-y-auto">
+        <div id="app-content" class="max-w-7xl mx-auto fade-in">
+            <!-- Dynamic Content Injected Here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-6">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-slate-500">
+            <p>Generated for Urban Planning Strategic Review • Data Sources: MMRDA, Urban Transport Reports, 2025 Estimates</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA REPOSITORY ---
+        const reportData = {
+            network: {
+                intro: "From a single-line experiment to a regional grid. By 2026, the Mumbai Metro aims to bridge the critical 'missing links' between the Island City, Western Suburbs, and the extended MMR region.",
+                growthStats: [
+                    { year: '2014', km: 11.4, label: 'Line 1 Only' },
+                    { year: '2022', km: 46.4, label: 'Lines 2A & 7 Added' },
+                    { year: '2026 (Proj)', km: 180, label: 'Lines 3, 4, 6, 9' },
+                    { year: '2030 (Master Plan)', km: 337, label: 'Full Network' }
+                ],
+                lines: [
+                    { name: "Line 1 (Blue)", status: "Operational", route: "Versova-Andheri-Ghatkopar", color: "bg-blue-500" },
+                    { name: "Line 2A (Yellow)", status: "Operational", route: "Dahisar-DN Nagar", color: "bg-yellow-400" },
+                    { name: "Line 7 (Red)", status: "Operational", route: "Dahisar E-Andheri E", color: "bg-red-500" },
+                    { name: "Line 3 (Aqua)", status: "Partial 2025/Full 2026", route: "Colaba-Bandra-SEEPZ", color: "bg-teal-400" },
+                    { name: "Line 4 (Green)", status: "Under Construction", route: "Wadala-Thane-Kasarvadavali", color: "bg-green-500" },
+                    { name: "Line 6 (Pink)", status: "2026 Target", route: "Lokhandwala-Vikhroli", color: "bg-pink-400" }
+                ]
+            },
+            commuter: {
+                intro: "The shift from 'Crush Load' to 'Cool Commute'. While the Metro offers dignity and speed, the 'Last Mile' remains the critical bottleneck defining the total user experience.",
+                routes: [
+                    { id: 'thane_sobo', name: 'Thane to CST/South Mumbai', trainTime: 85, metroTime: 50, trainCost: 20, metroCost: 100, trainComfort: 'Severe Crush', metroComfort: 'High' },
+                    { id: 'andheri_bk', name: 'Andheri to BKC', trainTime: 45, metroTime: 20, trainCost: 10, metroCost: 40, trainComfort: 'High Crush', metroComfort: 'High' },
+                    { id: 'dahisar_andheri', name: 'Dahisar to Andheri', trainTime: 40, metroTime: 25, trainCost: 15, metroCost: 50, trainComfort: 'Moderate Crush', metroComfort: 'High' }
+                ],
+                densityData: {
+                    labels: ['Local Train (Peak)', 'Metro (Peak)', 'Bus (BEST)', 'Intl Standard'],
+                    data: [16, 8, 6, 4], // Pax per sq meter
+                    desc: "Passengers per sq. meter standing space"
+                }
+            },
+            economy: {
+                intro: "Infrastructure as the engine for a $1.5 Trillion economy. The Metro isn't just transport; it's a catalyst for real estate re-valuation and environmental sustainability.",
+                gdpGrowth: [6.5, 7.1, 7.8, 8.2, 8.5],
+                realEstate: {
+                    labels: ['2018', '2020', '2022', '2024', '2026 (Est)'],
+                    regions: {
+                        'Thane': [12000, 12500, 14000, 16500, 18500],
+                        'Mira Rd': [7000, 7200, 8500, 9800, 11000],
+                        'Andheri': [22000, 21500, 23000, 26000, 29000]
+                    }
+                },
+                environment: {
+                    co2: 260000, // tons saved
+                    vehicles: 450000 // daily vehicle reduction
+                }
+            },
+            challenges: {
+                intro: "The road ahead is paved with challenges. Balancing operational viability with affordability for the working class remains the central tension of the project.",
+                outlookTable: [
+                    { milestone: "Aqua Line 3 Full Ops", date: "Mid 2026", status: "Critical Path", impact: "High" },
+                    { milestone: "Line 6 (E-W Connector)", date: "Late 2026", status: "Delayed", impact: "Medium" },
+                    { milestone: "Navi Mumbai Integration", date: "2027", status: "Planning", impact: "High" },
+                    { milestone: "Ticketing Integration", date: "Ongoing", status: "Partial", impact: "Medium" }
+                ],
+                affordability: {
+                    labels: ['Local Train (Monthly)', 'Metro (Daily * 25)', 'Auto/Taxi', 'Private Car'],
+                    data: [350, 2000, 4500, 12000] // Monthly cost in INR
+                }
+            }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentView = 'network';
+        let charts = {}; // Store chart instances to destroy them before re-rendering
+
+        // --- CORE FUNCTIONS ---
+
+        function init() {
+            switchView('network');
+        }
+
+        function switchView(viewName) {
+            currentView = viewName;
+            
+            // Update Nav UI
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('nav-active');
+                if (el.textContent.toLowerCase().includes(viewName === 'network' ? 'infrastructure' : viewName === 'outlook' ? 'challenges' : viewName)) {
+                    el.classList.add('nav-active');
+                }
+            });
+
+            const contentDiv = document.getElementById('app-content');
+            contentDiv.innerHTML = ''; // Clear content
+            contentDiv.className = 'max-w-7xl mx-auto opacity-0'; // Reset fade
+
+            // Render Views
+            setTimeout(() => {
+                if (viewName === 'network') renderNetworkView(contentDiv);
+                if (viewName === 'commuter') renderCommuterView(contentDiv);
+                if (viewName === 'economy') renderEconomyView(contentDiv);
+                if (viewName === 'outlook') renderOutlookView(contentDiv);
+                
+                contentDiv.classList.remove('opacity-0');
+                contentDiv.classList.add('fade-in');
+            }, 50);
+        }
+
+        // --- VIEW RENDERERS ---
+
+        function renderNetworkView(container) {
+            container.innerHTML = `
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Infrastructure Status & Roadmap (2026 Focus)</h2>
+                    <p class="text-lg text-slate-600 max-w-4xl">${reportData.network.intro}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <!-- Growth Chart -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-slate-700">Network Growth: Operational Length (Km)</h3>
+                        <div class="chart-container">
+                            <canvas id="networkChart"></canvas>
+                        </div>
+                        <p class="mt-4 text-sm text-slate-500 italic">Data Source: MMRDA Annual Reports & Projections. Note the exponential jump expected by 2026.</p>
+                    </div>
+
+                    <!-- Line Status List -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-slate-700">Current & Upcoming Lines</h3>
+                        <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                            ${reportData.network.lines.map(line => `
+                                <div class="flex items-center justify-between p-3 bg-slate-50 rounded border border-slate-100">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-3 h-12 ${line.color} rounded"></div>
+                                        <div>
+                                            <div class="font-bold text-slate-800">${line.name}</div>
+                                            <div class="text-xs text-slate-500">${line.route}</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium ${line.status.includes('Operational') ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800'}">
+                                        ${line.status}
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mt-6 p-4 bg-blue-50 rounded border border-blue-100">
+                            <h4 class="font-semibold text-blue-900 text-sm">Integration Alert:</h4>
+                            <p class="text-sm text-blue-800 mt-1">Multi-modal integration remains the biggest hurdle. Physical connectivity between Aqua Line 3 and Suburban Rail at Dadar and Churchgate is critical for 2026 success.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Init Chart
+            const ctx = document.getElementById('networkChart').getContext('2d');
+            charts['network'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: reportData.network.growthStats.map(d => d.year),
+                    datasets: [{
+                        label: 'Operational Km',
+                        data: reportData.network.growthStats.map(d => d.km),
+                        backgroundColor: ['#94a3b8', '#64748b', '#3b82f6', '#1e40af'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        function renderCommuterView(container) {
+            container.innerHTML = `
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">The Commuter's Lens: Productivity & Impact</h2>
+                    <p class="text-lg text-slate-600 max-w-4xl">${reportData.commuter.intro}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Interactive Calculator -->
+                    <div class="card p-6 lg:col-span-2">
+                        <h3 class="text-lg font-semibold mb-6 text-slate-700">Metro vs. Local Train: The Trade-off</h3>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                            <div class="flex-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Select Corridor</label>
+                                <select id="routeSelect" class="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500" onchange="updateCalculator()">
+                                    ${reportData.commuter.routes.map(r => `<option value="${r.id}">${r.name}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4" id="calcResults">
+                            <!-- Results injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Density Chart -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-slate-700">Quality of Life: "Crush Load"</h3>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="densityChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4">Graph shows passengers per square meter. >6 is considered inhumane. The Metro limits this to 8 (peak design) but practically 4-6 with AC.</p>
+                    </div>
+
+                    <!-- Last Mile Analysis -->
+                    <div class="card p-6 lg:col-span-3 bg-gradient-to-r from-slate-50 to-white">
+                        <h3 class="text-lg font-semibold mb-2 text-slate-800">The "Last-Mile" Crisis</h3>
+                        <p class="text-slate-600 mb-4">The journey doesn't end at the platform. Station-area infrastructure is lagging.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 border border-red-100 bg-red-50 rounded">
+                                <div class="font-bold text-red-700 mb-1">Walking Conditions</div>
+                                <p class="text-sm text-red-600">Narrow footpaths (avg 1.5m) at Line 2A stations force pedestrians onto the road.</p>
+                            </div>
+                            <div class="p-4 border border-orange-100 bg-orange-50 rounded">
+                                <div class="font-bold text-orange-700 mb-1">Auto-Rickshaw Stands</div>
+                                <p class="text-sm text-orange-600">Lack of designated bays causes traffic bottlenecks at station exits (e.g., Kurla, Ghatkopar).</p>
+                            </div>
+                            <div class="p-4 border border-green-100 bg-green-50 rounded">
+                                <div class="font-bold text-green-700 mb-1">Skywalk Integration</div>
+                                <p class="text-sm text-green-600">Positive: New skywalks planned for Line 7, but execution is currently 40% behind schedule.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Init Density Chart
+            const dCtx = document.getElementById('densityChart').getContext('2d');
+            charts['density'] = new Chart(dCtx, {
+                type: 'bar',
+                data: {
+                    labels: reportData.commuter.densityData.labels,
+                    datasets: [{
+                        label: 'Pax / Sq. m',
+                        data: reportData.commuter.densityData.data,
+                        backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#10b981']
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            updateCalculator(); // Initial render
+        }
+
+        function updateCalculator() {
+            const routeId = document.getElementById('routeSelect').value;
+            const route = reportData.commuter.routes.find(r => r.id === routeId);
+            
+            const resultsDiv = document.getElementById('calcResults');
+            const timeDiff = route.trainTime - route.metroTime;
+            const costDiff = route.metroCost - route.trainCost;
+
+            resultsDiv.innerHTML = `
+                <div class="p-4 bg-white border border-slate-200 rounded shadow-sm">
+                    <div class="text-xs text-slate-500 uppercase tracking-wide">Local Train</div>
+                    <div class="text-2xl font-bold text-slate-700 mt-1">${route.trainTime} min</div>
+                    <div class="text-sm text-slate-500">₹${route.trainCost} (Ticket)</div>
+                    <div class="text-xs font-semibold text-red-500 mt-2">Status: ${route.trainComfort}</div>
+                </div>
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white text-[10px] px-2 py-1 rounded-bl">RECOMMENDED</div>
+                    <div class="text-xs text-blue-600 uppercase tracking-wide">Metro</div>
+                    <div class="text-2xl font-bold text-blue-700 mt-1">${route.metroTime} min</div>
+                    <div class="text-sm text-blue-600">₹${route.metroCost} (Ticket)</div>
+                    <div class="text-xs font-semibold text-green-600 mt-2">Status: ${route.metroComfort}</div>
+                </div>
+                <div class="col-span-2 mt-2 p-3 bg-green-100 rounded text-center">
+                    <span class="font-bold text-green-800">Impact:</span> 
+                    <span class="text-green-700">Save ${timeDiff} mins daily for ₹${costDiff} extra.</span>
+                </div>
+            `;
+        }
+
+        function renderEconomyView(container) {
+            container.innerHTML = `
+                 <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Economic & National Significance</h2>
+                    <p class="text-lg text-slate-600 max-w-4xl">${reportData.economy.intro}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Real Estate Chart -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-slate-700">The "Metro Premium": Property Prices (Avg PSF)</h3>
+                        <div class="chart-container">
+                            <canvas id="realEstateChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- GDP & Environment Text -->
+                    <div class="space-y-6">
+                        <div class="card p-6">
+                            <h3 class="text-lg font-semibold mb-4 text-slate-700">GDP Contribution ($1.5T Goal)</h3>
+                            <p class="text-slate-600 mb-4">Efficient mobility is a force multiplier. By de-clogging the Western Express Highway (WEH) and linking BKC to SEEPZ (Line 3), the Metro is projected to unlock <span class="font-bold text-blue-600">₹40,000 Cr</span> in annual productivity gains by 2030.</p>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                            </div>
+                            <p class="text-xs text-right text-slate-500">45% of Mumbai's GDP growth is linked to Infra upgrades.</p>
+                        </div>
+
+                        <div class="card p-6 bg-green-50 border border-green-100">
+                            <h3 class="text-lg font-semibold mb-2 text-green-800">Environmental ROI</h3>
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-green-700">${(reportData.economy.environment.co2 / 1000).toFixed(0)}k</div>
+                                    <div class="text-xs text-green-600">Tons CO2 Saved/Yr</div>
+                                </div>
+                                <div class="h-12 w-px bg-green-200"></div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-green-700">${(reportData.economy.environment.vehicles / 1000).toFixed(0)}k</div>
+                                    <div class="text-xs text-green-600">Daily Vehicle Trips Reduced</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Init Real Estate Chart
+            const reCtx = document.getElementById('realEstateChart').getContext('2d');
+            charts['realEstate'] = new Chart(reCtx, {
+                type: 'line',
+                data: {
+                    labels: reportData.economy.realEstate.labels,
+                    datasets: [
+                        {
+                            label: 'Thane (Hub)',
+                            data: reportData.economy.realEstate.regions.Thane,
+                            borderColor: '#3b82f6',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Mira Rd (Emerging)',
+                            data: reportData.economy.realEstate.regions['Mira Rd'],
+                            borderColor: '#f59e0b',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Andheri (Core)',
+                            data: reportData.economy.realEstate.regions.Andheri,
+                            borderColor: '#10b981',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: { mode: 'index', intersect: false } },
+                    scales: { y: { beginAtZero: false, title: { display: true, text: 'Price (₹/sq ft)' } } }
+                }
+            });
+        }
+
+        function renderOutlookView(container) {
+            container.innerHTML = `
+                 <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Critical Challenges & 2026 Outlook</h2>
+                    <p class="text-lg text-slate-600 max-w-4xl">${reportData.challenges.intro}</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Affordability Analysis -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-slate-700">The "Affordability Gap"</h3>
+                        <p class="text-sm text-slate-500 mb-4">Is the Metro pricing out the working class? A monthly metro commute is ~6x costlier than a second-class train pass.</p>
+                        <div class="chart-container">
+                            <canvas id="affordabilityChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 2026 Table -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4 text-slate-700">2026 Roadmap Summary</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full text-sm text-left text-slate-600">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                    <tr>
+                                        <th class="px-4 py-3">Milestone</th>
+                                        <th class="px-4 py-3">Timeline</th>
+                                        <th class="px-4 py-3">Risk Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${reportData.challenges.outlookTable.map(row => `
+                                        <tr class="border-b hover:bg-slate-50">
+                                            <td class="px-4 py-3 font-medium">${row.milestone}</td>
+                                            <td class="px-4 py-3">${row.date}</td>
+                                            <td class="px-4 py-3">
+                                                <span class="px-2 py-1 rounded text-xs font-bold ${row.status === 'Critical Path' || row.status === 'Delayed' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">
+                                                    ${row.status}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Lessons Section -->
+                    <div class="card p-6 lg:col-span-2 bg-slate-800 text-white">
+                        <h3 class="text-xl font-bold mb-4">Lessons for Urban India</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <h4 class="font-bold text-blue-300 mb-2">1. Land Acquisition First</h4>
+                                <p class="text-sm text-slate-300">The 4-year delay in Line 3 due to the Aarey Car Shed controversy proves that political consensus on land is a pre-requisite, not a parallel process.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-blue-300 mb-2">2. Multi-Modal from Day 1</h4>
+                                <p class="text-sm text-slate-300">Building stations without bus bays or skywalks creates chaos. Delhi learned this late; Mumbai is still playing catch up. Pune and Nagpur must integrate early.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-blue-300 mb-2">3. Non-Fare Revenue</h4>
+                                <p class="text-sm text-slate-300">To keep tickets affordable, Metro corporations must maximize station retail and advertising rights, currently under-utilized in Mumbai Line 1.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+             // Init Affordability Chart
+            const aCtx = document.getElementById('affordabilityChart').getContext('2d');
+            charts['affordability'] = new Chart(aCtx, {
+                type: 'bar',
+                data: {
+                    labels: reportData.challenges.affordability.labels,
+                    datasets: [{
+                        label: 'Monthly Cost (INR)',
+                        data: reportData.challenges.affordability.data,
+                        backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#64748b'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>
